@@ -5,13 +5,13 @@
 using namespace std;
 
 vector<int> twoSum(vector<int>& nums, int target) {
-    unordered_map<int, int> um;
-    for (int i = 0; i < nums.size(); i++) {
-        if (um.count(target-nums[i]) > 0) return {um[target-nums[i]], i};
-        um[nums[i]] = i;
+    vector<pair<int, int>> v; for (int i = 0; i < nums.size(); i++) v.push_back({nums[i], i});
+    sort(v.begin(), v.end());
+    for (int i = 0, j = v.size()-1;;) {
+        if (v[i].first+v[j].first == target) return {v[i].second, v[j].second};
+        else if (v[i].first+v[j].first > target) j--;
+        else i++;
     }
-
-    return {0};
 }
 
 int main() {
