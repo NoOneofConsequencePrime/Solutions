@@ -5,8 +5,22 @@
 using namespace std;
 
 void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-    for (int i = m; i < m+n; i++) nums1[i] = nums2[i-m];
-    sort(nums1.begin(), nums1.end());
+    vector<int> tmp = nums1;
+    for (int i = 0, j = 0; i < m || j < n;) {
+        if (i < m && j < n) {
+            if (tmp[i] < nums2[j]) {
+                nums1[i+j] = tmp[i];
+                i++;
+            } else {
+                nums1[i+j] = nums2[j];
+                j++;
+            }
+        } else if (i < m) {
+            for (; i < m; i++) nums1[i+j] = tmp[i];
+        } else if (j < n) {
+            for (; j < n; j++) nums1[i+j] = nums2[j];
+        }
+    }
 }
 
 int main() {
