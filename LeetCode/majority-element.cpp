@@ -8,8 +8,7 @@ int majorityElement(vector<int>& nums) {
     unordered_map<int, int> um;
     int n = nums.size();
     for (auto& x : nums) {
-        um[x]++;
-        if (um[x] > n/2) return x;
+        if (++um[x] > n/2) return x;
     }
 
     return -1;
