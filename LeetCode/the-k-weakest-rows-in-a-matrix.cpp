@@ -8,9 +8,7 @@ using namespace std;
 vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {
     vector<pair<int, int>> v;
     for (int i = 0; i < mat.size(); i++) {
-        int cnt = 0;
-        for (auto& x : mat[i]) cnt += x;
-        v.push_back({cnt, i});
+        v.push_back({lower_bound(mat[i].begin(), mat[i].end(), 0, greater<int>())-mat[i].begin(), i});
     }
     sort(v.begin(), v.end());
 
