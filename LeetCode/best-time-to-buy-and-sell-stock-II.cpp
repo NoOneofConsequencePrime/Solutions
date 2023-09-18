@@ -8,14 +8,10 @@
 using namespace std;
 
 int maxProfit(vector<int>& prices) {
-    int mi = prices[0], ret = 0;
+    int ret = 0;
     for (int i = 1; i < prices.size(); i++) {
-        if (prices[i] < prices[i-1]) {
-            ret += max(prices[i-1]-mi, 0);
-            mi = prices[i];
-        }
+        ret += max(0, prices[i]-prices[i-1]);
     }
-    if (prices.size() > 1 && prices[prices.size()-1] >= prices[prices.size()-2]) ret += prices[prices.size()-1]-mi;
 
     return ret;
 }
