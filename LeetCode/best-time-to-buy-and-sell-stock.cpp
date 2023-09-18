@@ -8,17 +8,11 @@ using namespace std;
 
 int maxProfit(vector<int>& prices) {
     int ret = 0;
-    stack<int> stk;
-    int mi = 0;
+    int mi = prices[0];
     for (int& x : prices) {
-        while (stk.size() > 0 && stk.top() > x) {
-            ret = max(ret, stk.top()-mi);
-            stk.pop();
-        }
-        if (stk.size() == 0) mi = x;
-        stk.push(x);
+        mi = min(mi, x);
+        ret = max(ret, x-mi);
     }
-    ret = max(ret, stk.top()-mi);
 
     return ret;
 }
