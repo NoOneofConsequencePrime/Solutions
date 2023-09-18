@@ -6,12 +6,10 @@
 using namespace std;
 
 void rotate(vector<int>& nums, int k) {
-    k %= nums.size();
-    int arr[nums.size()*2];
-    for (int i = 0; i < nums.size(); i++) {
-        arr[i] = nums[i]; arr[i+nums.size()] = nums[i];
-    }
-    for (int i = nums.size()-k; i < nums.size()*2-k; i++) nums[i-nums.size()+k] = arr[i];
+    int n = nums.size();
+    k %= n;
+    for (int i = 0; i < n-k; i++) nums.push_back(nums[i]);
+    nums.erase(nums.begin(), nums.begin()+(n-k));
 }
 
 int main() {
