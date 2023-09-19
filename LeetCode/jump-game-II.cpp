@@ -8,17 +8,16 @@
 using namespace std;
 
 int jump(vector<int>& nums) {
-    int i = nums.size()-1, ret = 0;
-    while (i > 0) {
-        for (int j = 0; j < i; j++) {
-            if (nums[j] >= i-j) {
-                i = j; ret++;
-                break;
-            }
+    int ret = 0, mx = 0, i = 0;
+    while (i < nums.size()) {
+        ret++;
+        int tmp = mx;
+        for (; i <= tmp && i < nums.size(); i++) {
+            mx = max(mx, i+nums[i]);
         }
     }
 
-    return ret;
+    return ret-1;
 }
 
 int main() {
