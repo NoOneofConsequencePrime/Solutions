@@ -9,17 +9,25 @@
 using namespace std;
 
 int findDuplicate(vector<int>& nums) {
-    unordered_set<int> st;
-    for (int& x : nums) {
-        if (st.count(x) > 0) return x;
-        else st.insert(x);
+    int i = 0, j = 0;
+    while (true) {
+        if (i == j && i != 0) break;
+        i = nums[i];
+        j = nums[nums[j]];
     }
 
-    return -1;
+    int prev = -1; i = 0;
+    while (true) {
+        if (i == j) break;
+        prev = i;
+        i = nums[i]; j = nums[j];
+    }
+
+    return nums[prev];
 }
 
 int main() {
-    vector<int> v = {3,1,3,4,2};
+    vector<int> v = {1,3,4,2,2};
     cout << findDuplicate(v);
 
     return 0;
