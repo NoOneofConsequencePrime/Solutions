@@ -8,28 +8,36 @@
 #include <unordered_set>
 using namespace std;
 
-vector<int> productExceptSelf(vector<int>& nums) {
-    int n = nums.size();
-    int pre[n], suf[n];
-    fill(pre, pre+n, 1); fill(suf, suf+n, 1);
-    pre[0] *= nums[0]; suf[n-1] *= nums.back();
-    for (int i = 1; i < n; i++) {
-        pre[i] *= pre[i-1]*nums[i];
-        suf[n-i-1] *= suf[n-i]*nums[n-i-1];
+int qPow(int b, int e) {
+    int ret = 1;
+    while (e > 0) {
+        if ((e&1) == 1) ret *= b;
+        e >>= 1;
+        if (e != 0) b *= b;
     }
+    return ret;
+}
+
+vector<int> productExceptSelf(vector<int>& nums) {
+    int cnt[61]; memset(cnt, 0, sizeof(cnt));
+    for (int& x : nums) cnt[x+30]++;
 
     vector<int> ret;
-    for (int i = 0; i < nums.size(); i++) {
-        if (i == 0) ret.push_back(suf[1]);
-        else if (i == nums.size()-1) ret.push_back(pre[nums.size()-2]);
-        else ret.push_back(pre[i-1]*suf[i+1]);
-    }
+    for (int& x : nums) {
+        int tmp = 1;
+        for (int i = 0; i <= 60; i++) {
+            if (i-30 == x) {
+                if (cnt[i] >= 2) tmp *= qPow(i-30, cnt[i]-1);
+            } else if (cnt[i] >= 1) tmp *= qPow(i-30, cnt[i]);
+        }
+        ret.push_back(tmp);
+    } 
 
     return ret;
 }
 
 int main() {
-    vector<int> v = {1,2,3,4};
+    vector<int> v = {-1,1,1,1,-1,-1,-1,1,1,1,-1,-1,-1,-1,1,-1,-1,-1,1,1,-1,-1,1};
     vector<int> ans = productExceptSelf(v);
     for (auto& x : ans) cout << x << " ";
 
