@@ -9,36 +9,46 @@
 using namespace std;
 
 class RandomizedSet {
+private:
+    unordered_map<int, int> um;
+    vector<int> v;
 public:
-    unordered_set<int> st;
     RandomizedSet() {}
     
     bool insert(int val) {
-        bool ret = true;
-        if (st.count(val) > 0) ret = false;
-        st.insert(val);
-        return ret;
+        if (um.count(val) == 0) {
+            um[val] = v.size();
+            v.push_back(val);
+
+            return true;
+        } else return false;
     }
     
     bool remove(int val) {
-        bool ret = false;
-        if (st.count(val) > 0) {
-            ret = true;
-        }
-        st.erase(val);
-        return ret;
+        if (um.count(val) > 0) {
+            int vi = um[val], bv = v.back();
+            swap(um[val], um[bv]);
+            swap(v[vi], v[v.size()-1]);
+            v.pop_back(); um.erase(val);
+
+            return true;
+        } return false;
     }
     
     int getRandom() {
-        unordered_set<int>::iterator it = st.begin();
-        int n = rand()%st.size();
-        for (int i = 0; i < n; i++) it++;
-        return *it;
+        return v[rand()%v.size()];
     }
 };
 
 int main() {
     RandomizedSet* obj = new RandomizedSet();
+    cout << obj->insert(1) << '\n';
+    cout << obj->remove(2) << '\n';
+    cout << obj->insert(2) << '\n';
+    cout << obj->getRandom() << '\n';
+    cout << obj->remove(1) << '\n';
+    cout << obj->insert(2) << '\n';
+    cout << obj->getRandom() << '\n';
 
     return 0;
 }
