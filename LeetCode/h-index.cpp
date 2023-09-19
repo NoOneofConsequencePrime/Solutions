@@ -8,14 +8,12 @@
 using namespace std;
 
 int hIndex(vector<int>& citations) {
-    int cnt[1002]; memset(cnt, 0, sizeof(cnt));
-    for (int& x : citations) cnt[x]++;
-    for (int i = sizeof(cnt)/sizeof(cnt[0])-2; i >= 0; i--) cnt[i] += cnt[i+1];
-    for (int i = sizeof(cnt)/sizeof(cnt[0])-1; i >= 0; i--) {
-        if (cnt[i] >= i) return i;
+    sort(citations.begin(), citations.end());
+    for (int i = 0; i < citations.size(); i++) {
+        if (citations.size()-i <= citations[i]) return citations.size()-i;
     }
 
-    return -1;
+    return 0;
 }
 
 int main() {
