@@ -8,21 +8,17 @@
 using namespace std;
 
 int jump(vector<int>& nums) {
-    int dis[nums.size()]; fill(dis, dis+nums.size(), -1);
-    queue<int> q;
-    dis[0] = 0; q.push(0);
-    while (!q.empty()) {
-        int u = q.front(); q.pop();
-        if (u == nums.size()-1) return dis[u];
-        for (int v = u+1; v <= u+nums[u] && v < nums.size(); v++) {
-            if (dis[v] == -1) {
-                dis[v] = dis[u]+1;
-                q.push(v);
+    int i = nums.size()-1, ret = 0;
+    while (i > 0) {
+        for (int j = 0; j < i; j++) {
+            if (nums[j] >= i-j) {
+                i = j; ret++;
+                break;
             }
         }
     }
 
-    return -1;
+    return ret;
 }
 
 int main() {
