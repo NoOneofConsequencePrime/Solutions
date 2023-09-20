@@ -10,11 +10,13 @@ using namespace std;
 
 int minOperations(vector<int>& nums, int x) {
     int n = nums.size(), ret = INT_MAX;
-    vector<int> psa; psa.push_back(nums[0]);
-    if (psa[0] == x) return 1;
+    unordered_map<int, int> um; um[nums[0]] = 0;
+    if (nums[0] == x) return 1;
+    int sum = nums[0];
     for (int i = 1; i < n; i++) {
-        psa.push_back(psa[i-1]+nums[i]);
-        if (psa[i] == x) ret = i+1;
+        sum += nums[i];
+        if (sum == x) ret = i+1;
+        um[sum] = i;
     }
 
     for (int i = n-1, sum = 0; i >= 0; i--) {
@@ -23,9 +25,7 @@ int minOperations(vector<int>& nums, int x) {
             ret = min(ret, n-i);
             continue;
         }
-        vector<int>::iterator low = lower_bound(psa.begin(), psa.end(), x-sum), up = upper_bound(psa.begin(), psa.end(), x-sum);
-        int idx = low-psa.begin();
-        if (low != up && idx < i) ret = min(ret, n-i+idx+1);
+        if (um.count(x-sum) != 0 && um[x-sum] < i) ret = min(ret, n-i+um[x-sum]+1);
     }
 
     if (ret == INT_MAX) return -1;
@@ -33,8 +33,8 @@ int minOperations(vector<int>& nums, int x) {
 }
 
 int main() {
-    vector<int> v = {1,1,4,2,3};
-    cout << minOperations(v, 5);
+    vector<int> v = {3,2,20,1,1,3};
+    cout << minOperations(v, 10);
 
     return 0;
 }
