@@ -6,13 +6,14 @@
 #include <stack>
 #include <deque>
 #include <unordered_set>
+#include <numeric>
 using namespace std;
 
 int minOperations(vector<int>& nums, int x) {
-    int target = 0, n = nums.size();
-    for (int& v : nums) target += v;
+    int target = accumulate(nums.begin(), nums.end(), 0), n = nums.size();
     if (target == x) return nums.size();
     target -= x;
+    if (target < 0) return -1;
 
     int ret = -1;
     for (int a = 0, b = 0, sum = 0; b < n; b++) {
