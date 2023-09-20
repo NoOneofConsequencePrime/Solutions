@@ -9,32 +9,27 @@
 using namespace std;
 
 int minOperations(vector<int>& nums, int x) {
-    int n = nums.size(), ret = INT_MAX;
-    unordered_map<int, int> um; um[nums[0]] = 0;
-    if (nums[0] == x) return 1;
-    int sum = nums[0];
-    for (int i = 1; i < n; i++) {
-        sum += nums[i];
-        if (sum == x) ret = i+1;
-        um[sum] = i;
-    }
+    int target = 0, n = nums.size();
+    for (int& v : nums) target += v;
+    if (target == x) return nums.size();
+    target -= x;
 
-    for (int i = n-1, sum = 0; i >= 0; i--) {
-        sum += nums[i];
-        if (sum == x) {
-            ret = min(ret, n-i);
-            continue;
+    int ret = -1;
+    for (int a = 0, b = 0, sum = 0; b < n; b++) {
+        sum += nums[b];
+        while (sum > target && a < b) {
+            sum -= nums[a];
+            a++;
         }
-        if (um.count(x-sum) != 0 && um[x-sum] < i) ret = min(ret, n-i+um[x-sum]+1);
+        if (sum == target) ret = max(ret, b-a+1);
     }
 
-    if (ret == INT_MAX) return -1;
-    return ret;
+    return (ret == -1)? -1 : n-ret;
 }
 
 int main() {
-    vector<int> v = {3,2,20,1,1,3};
-    cout << minOperations(v, 10);
+    vector<int> v = {1, 2, 3};
+    cout << minOperations(v, 6);
 
     return 0;
 }
