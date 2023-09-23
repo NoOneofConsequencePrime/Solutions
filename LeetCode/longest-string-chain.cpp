@@ -9,37 +9,21 @@
 #include <numeric>
 using namespace std;
 
-int chkStr(string a, string b) {
-    int cnt = 0;
-    for (int i = 0, j = 0; i < a.length() && j < b.length(); i++, j++) {
-        while (j < b.length() && a[i] != b[j]) {
-            cnt++;
-            j++;
-        }
-    }
-    cnt += (b.length()-1 == a.length() && cnt == 0);
-    
-    return b.length()-1 == a.length() && cnt == 1;
-}
-
-bool cmp(string& a, string& b) {return a.length() < b.length();}
+static bool cmp(string& a, string& b) {return a.length() < b.length();}
 
 int longestStrChain(vector<string>& words) {
     sort(words.begin(), words.end(), cmp);
-    int dist[words.size()]; memset(dist, 0, sizeof(dist));
-    queue<int> q;
-    for (int i = 0; i < words.size(); i++) {
-        dist[i] = 1; q.push(i);
-    }
+    unordered_map<string, int> um;
+    for (string& str : words) um[str] = 1;
 
     int ret = 1;
-    while (!q.empty()) {
-        int u = q.front(); q.pop();
-        for (int i = u+1; i < words.size(); i++) {
-            if (chkStr(words[u], words[i]) && dist[i] < dist[u]+1) {
-                dist[i] = dist[u]+1;
-                q.push(i);
-                ret = max(ret, dist[i]);
+    for (int i = words.size()-1; i >= 0; i--) {
+        string str = words[i];
+        for (int j = 0; j < str.length(); j++) {
+            string tmp = str.substr(0, j) + str.substr(j+1, str.length()-j-1);
+            if (um.count(tmp) != 0) {
+                um[tmp] = max(um[tmp], um[str]+1);
+                ret = max(ret, um[tmp]);
             }
         }
     }
