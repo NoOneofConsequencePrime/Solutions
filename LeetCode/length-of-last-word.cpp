@@ -10,16 +10,13 @@
 using namespace std;
 
 int lengthOfLastWord(string s) {
-    int a = 0, b = -1;
+    int len = 0;
     for (int i = s.length()-1; i >= 0; i--) {
-        if (b == -1 && s[i] != ' ') b = i;
-        if (b != -1 && s[i] == ' ') {
-            a = i+1; break;
-        }
+        if (s[i] != ' ') len++;
+        else if (len > 0) break;
     }
-    printf("%d %d", a, b);
 
-    return b-a+1;
+    return len;
 }
 
 int main() {
