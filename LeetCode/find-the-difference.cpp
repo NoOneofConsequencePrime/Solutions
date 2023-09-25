@@ -10,14 +10,11 @@
 using namespace std;
 
 char findTheDifference(string s, string t) {
-    unordered_map<char, int> um;
-    for (char& c : s) um[c]++;
-    for (char& c : t) {
-        um[c]--;
-        if (um[c] == -1) return c;
-    }
+    int sum = 0;
+    for (char& c : s) sum -= c;
+    for (char& c : t) sum += c;
 
-    return ' ';
+    return sum;
 }
 
 int main() {
