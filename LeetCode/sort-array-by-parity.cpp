@@ -9,20 +9,14 @@
 #include <numeric>
 using namespace std;
 
+bool cmp(int& a, int& b) {
+    return a%2 < b%2;
+}
+
 vector<int> sortArrayByParity(vector<int>& nums) {
-    deque<int> dq;
-    for (int& x : nums) {
-        if (x%2) dq.push_back(x);
-        else dq.push_front(x);
-    }
+    sort(nums.begin(), nums.end(), cmp);
 
-    vector<int> ret;
-    while (!dq.empty()) {
-        ret.push_back(dq.front());
-        dq.pop_front();
-    }
-
-    return ret;
+    return nums;
 }
 
 int main() {
