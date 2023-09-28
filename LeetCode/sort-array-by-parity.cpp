@@ -10,16 +10,13 @@
 using namespace std;
 
 vector<int> sortArrayByParity(vector<int>& nums) {
-    for (int i = 0, j = nums.size()-1; i < j; i++) {
-        while (j >= 0 && nums[j]%2) j--;
-        if (i >= j) break;
-        if (nums[i]%2) {
-            swap(nums[i], nums[j]);
-            j--;
-        }
+    vector<int> ret(nums.size());
+    for (int i = 0, a = 0, b = nums.size()-1; i < nums.size(); i++) {
+        if (nums[i]%2) ret[b--] = nums[i];
+        else ret[a++] = nums[i];
     }
 
-    return nums;
+    return ret;
 }
 
 int main() {
