@@ -9,18 +9,21 @@
 #include <numeric>
 using namespace std;
 
-bool cmp(int& a, int& b) {
-    return a%2 < b%2;
-}
-
 vector<int> sortArrayByParity(vector<int>& nums) {
-    sort(nums.begin(), nums.end(), cmp);
+    for (int i = 0, j = nums.size()-1; i < j; i++) {
+        while (j >= 0 && nums[j]%2) j--;
+        if (i >= j) break;
+        if (nums[i]%2) {
+            swap(nums[i], nums[j]);
+            j--;
+        }
+    }
 
     return nums;
 }
 
 int main() {
-    vector<int> v = {3,1,2,4};
+    vector<int> v = {0, 1, 2};
     vector<int> ans = sortArrayByParity(v);
     for (int&x : ans) cout << x << " ";
 
