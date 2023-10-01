@@ -10,15 +10,12 @@
 using namespace std;
 
 string reverseWords(string s) {
-    for (int i = 0, j = 1; j < s.length(); j++) {
-        printf("(%d, %d)\n", i, j);
-        if (s[j] == ' ') {
-            for (int a = 0; a < (i+j)/2-i; a++) swap(s[i+a], s[j-a-1]);
-            i = j+1;
-        } else if (j == s.length()-1) {
-            j++;
-            for (int a = 0; a < (i+j)/2-i; a++) swap(s[i+a], s[j-a-1]);
-        }
+    int l = 0, r = 0;
+    while (r < s.length()) {
+        while (r < s.length() && s[r] != ' ') r++;
+        reverse(s.begin()+l, s.begin()+r);
+        l = r+1;
+        r = l;
     }
 
     return s;
