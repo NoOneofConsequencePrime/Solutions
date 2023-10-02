@@ -10,27 +10,44 @@
 using namespace std;
 
 int candy(vector<int>& ratings) {
-    vector<pair<int, int>> v;
-    for (int i = 0; i < ratings.size(); i++) v.push_back({ratings[i], i});
-    sort(v.begin(), v.end());
+    if (ratings.size() == 1) return 1;
+    int ret = 0;
+    int cnt[ratings.size()]; memset(cnt, 0, sizeof(cnt));
 
-    int cnt[ratings.size()]; fill(cnt, cnt+ratings.size(), 1);
-    for (auto& p : v) {
-        if (p.second != 0) {
-            if (ratings[p.second] > ratings[p.second-1]) cnt[p.second] = cnt[p.second-1]+1;
+    queue<int> q;
+    for (int i = 0; i < ratings.size(); i++) {
+        if (i > 0 && i < ratings.size()-1 && ratings[i-1] >= ratings[i] && ratings[i] <= ratings[i+1]) {
+            q.push(i); cnt[i] = 1; ret++;
         }
-        if (p.second != ratings.size()-1) {
-            if (ratings[p.second] > ratings[p.second+1]) cnt[p.second] = max(cnt[p.second], cnt[p.second+1]+1);
+        if (i == 0 && ratings[i] <= ratings[i+1]) {
+            q.push(i); cnt[i] = 1; ret++;
+        } else if (i == ratings.size()-1 && ratings[i] <= ratings[i-1]) {
+            q.push(i); cnt[i] = 1; ret++;
         }
     }
 
-    int ret = 0;
-    for (int& x : cnt) ret += x;
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        printf("%d: %d\n", cur, cnt[cur]);
+        if (cur > 0 && cnt[cur]+1 > cnt[cur-1] && ratings[cur-1] > ratings[cur]) {
+            ret -= cnt[cur-1];
+            cnt[cur-1] = cnt[cur]+1;
+            ret += cnt[cur-1];
+            q.push(cur-1);
+        }
+        if (cur < ratings.size()-1 && cnt[cur]+1 > cnt[cur+1] && ratings[cur+1] > ratings[cur]) {
+            ret -= cnt[cur+1];
+            cnt[cur+1] = cnt[cur]+1;
+            ret += cnt[cur+1];
+            q.push(cur+1);
+        }
+    }
+
     return ret;
 }
 
 int main() {
-    vector<int> v = {1,0,2};
+    vector<int> v = {1,3,4,5,2};
     cout << candy(v);
 
     return 0;
