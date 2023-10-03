@@ -11,37 +11,16 @@ using namespace std;
 
 int candy(vector<int>& ratings) {
     if (ratings.size() == 1) return 1;
+    int n = ratings.size(), cnt[n]; fill(cnt, cnt+n, 1);
+    for (int i = 1; i < n; i++) {
+        if (ratings[i] > ratings[i-1]) cnt[i] = cnt[i-1]+1;
+    }
+    for (int i = n-2; i >= 0; i--) {
+        if (ratings[i] > ratings[i+1]) cnt[i] = max(cnt[i], cnt[i+1]+1);
+    }
+
     int ret = 0;
-    int cnt[ratings.size()]; memset(cnt, 0, sizeof(cnt));
-
-    queue<int> q;
-    for (int i = 0; i < ratings.size(); i++) {
-        if (i > 0 && i < ratings.size()-1 && ratings[i-1] >= ratings[i] && ratings[i] <= ratings[i+1]) {
-            q.push(i); cnt[i] = 1; ret++;
-        }
-        if (i == 0 && ratings[i] <= ratings[i+1]) {
-            q.push(i); cnt[i] = 1; ret++;
-        } else if (i == ratings.size()-1 && ratings[i] <= ratings[i-1]) {
-            q.push(i); cnt[i] = 1; ret++;
-        }
-    }
-
-    while (!q.empty()) {
-        int cur = q.front(); q.pop();
-        printf("%d: %d\n", cur, cnt[cur]);
-        if (cur > 0 && cnt[cur]+1 > cnt[cur-1] && ratings[cur-1] > ratings[cur]) {
-            ret -= cnt[cur-1];
-            cnt[cur-1] = cnt[cur]+1;
-            ret += cnt[cur-1];
-            q.push(cur-1);
-        }
-        if (cur < ratings.size()-1 && cnt[cur]+1 > cnt[cur+1] && ratings[cur+1] > ratings[cur]) {
-            ret -= cnt[cur+1];
-            cnt[cur+1] = cnt[cur]+1;
-            ret += cnt[cur+1];
-            q.push(cur+1);
-        }
-    }
+    for (int& x : cnt) ret += x;
 
     return ret;
 }
