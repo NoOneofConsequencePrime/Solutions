@@ -9,7 +9,7 @@
 #include <numeric>
 using namespace std;
 
-string removeDuplicateLetters(string s) {
+string smallestSubsequence(string s) {
     int lApp[30];
     for (int i = 0; i < s.length(); i++) lApp[s[i]-'a'] = i;
 
@@ -34,7 +34,7 @@ string removeDuplicateLetters(string s) {
 }
 
 int main() {
-    cout << removeDuplicateLetters("cbacdcbc");
+    cout << smallestSubsequence("cbacdcbc");
 
     return 0;
 }
