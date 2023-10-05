@@ -10,7 +10,11 @@
 using namespace std;
 
 void sortColors(vector<int>& nums) {
-    sort(nums.begin(), nums.end());
+    int cnt[3]; memset(cnt, 0, sizeof(cnt));
+    for (int& x : nums) cnt[x]++;
+    fill(nums.begin(), nums.begin()+cnt[0], 0);
+    fill(nums.begin()+cnt[0], nums.begin()+cnt[0]+cnt[1], 1);
+    fill(nums.begin()+cnt[0]+cnt[1], nums.end(), 2);
 }
 
 int main() {
