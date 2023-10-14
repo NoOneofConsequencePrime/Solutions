@@ -10,9 +10,9 @@
 using namespace std;
 
 bool canConstruct(string ransomNote, string magazine) {
-    unordered_map<char, int> um;
-    for (char& c : magazine) um[c]++;
-    for (char& c : ransomNote) if (um[c]-- <= 0) return false;
+    int cnt[26]; memset(cnt, 0, sizeof(cnt));
+    for (char& c : magazine) cnt[c-'a']++;
+    for (char& c : ransomNote) if (cnt[c-'a']-- <= 0) return false;
 
     return true;
 }
