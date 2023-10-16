@@ -10,14 +10,10 @@
 using namespace std;
 
 vector<int> getRow(int rowIndex) {
-    if (rowIndex == 0) return {1};
-    
-    vector<int> tmp = getRow(rowIndex-1), ret;
-    ret.push_back(1);
-    for (int i = 1; i < tmp.size(); i++) {
-        ret.push_back(tmp[i-1]+tmp[i]);
+    vector<int> ret(rowIndex+1, 1);
+    for (int i = 1; i < rowIndex; i++) {
+        for (int j = i; j > 0; j--) ret[j] += ret[j-1];
     }
-    ret.push_back(1);
 
     return ret;
 }
