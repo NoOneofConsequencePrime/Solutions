@@ -9,21 +9,24 @@
 #include <numeric>
 using namespace std;
 
-bool isHappy(int n) {
-    unordered_set<int> st;
-    while (true) {
-        int m = 0;
-        while (n != 0) {
-            m += (n%10) * (n%10);
-            n /= 10;
-        }
-        if (st.count(m) != 0) return false;
-        if (m == 1) break;
-        st.insert(m);
-        n = m;
+int calc(int n) {
+    int ret = 0;
+    while (n) {
+        ret += (n%10)*(n%10);
+        n /= 10;
     }
 
-    return true;
+    return ret;
+}
+
+bool isHappy(int n) {
+    int a = calc(n), b = calc(calc(n));
+    while (a != b || a == 1) {
+        a = calc(a); b = calc(calc(b));
+        if (a == 1) return true;
+    }
+
+    return false;
 }
 
 int main() {
