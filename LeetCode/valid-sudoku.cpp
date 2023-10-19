@@ -10,7 +10,7 @@
 using namespace std;
 
 bool isValidSudoku(vector<vector<char>>& board) {
-    int chk = 0;
+    short chk = 0;
     for (int i = 0; i < 9; i++) {
         chk = 0;
         for (int j = 0; j < 9; j++) {
