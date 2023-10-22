@@ -11,12 +11,9 @@ using namespace std;
 
 int maximumScore(vector<int>& nums, int k) {
     if (nums.size() == 1) return nums[0];
-    
+
     int ret = -1;
     vector<pair<int, int>> pre, suf;
-    // vector<int> pre(k+1), suf(nums.size()-k);
-    // copy(nums.begin(), nums.begin()+k+1, pre.begin());
-    // copy(nums.begin()+k, nums.end(), suf.begin());
 
     for (int i = k-1, preMi = nums[k]; i >= 0; i--) {
         if (nums[i] < preMi) {
@@ -42,25 +39,17 @@ int maximumScore(vector<int>& nums, int k) {
         }
     }
 
-    // for (auto x : pre) printf("%d: %d\n", x.first, x.second);
-    // cout << endl;
-    // for (auto x : suf) printf("%d: %d\n", x.first, x.second);
-    // cout << endl;
-
     if (pre.size() == 0 || suf.size() == 0) return ret;
 
     for (int i = 0; i < suf.size(); i++) {
         int idx = lower_bound(pre.begin(), pre.end(), suf[i])-pre.begin();
         int prod = (pre[min((int)pre.size()-1, idx)].second + suf[i].second - 1) * suf[i].first;
         ret = max(ret, prod);
-        // printf("%d - %d\n", ret, idx);
     }
-    // cout << endl;
     for (int i = pre.size()-1; i >= 0; i--) {
         int idx = upper_bound(suf.begin(), suf.end(), pre[i], greater<pair<int, int>>())-suf.begin()-1;
         int prod = (suf[max(idx, 0)].second + pre[i].second - 1) * pre[i].first;
         ret = max(ret, prod);
-        // printf("%d - %d\n", ret, idx);
     }
 
     return ret;
