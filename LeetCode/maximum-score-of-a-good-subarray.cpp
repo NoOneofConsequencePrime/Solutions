@@ -10,41 +10,68 @@
 using namespace std;
 
 int maximumScore(vector<int>& nums, int k) {
+    if (nums.size() == 1) return nums[0];
+    
     int ret = -1;
-    vector<int> pre(k+1), suf(nums.size()-k);
-    copy(nums.begin(), nums.begin()+k+1, pre.begin());
-    copy(nums.begin()+k, nums.end(), suf.begin());
+    vector<pair<int, int>> pre, suf;
+    // vector<int> pre(k+1), suf(nums.size()-k);
+    // copy(nums.begin(), nums.begin()+k+1, pre.begin());
+    // copy(nums.begin()+k, nums.end(), suf.begin());
 
-    for (int i = k-1; i >= 0; i--) pre[i] = min(pre[i], pre[i+1]);
-    for (int i = 1; i < suf.size(); i++) suf[i] = min(suf[i], suf[i-1]);
+    for (int i = k-1, preMi = nums[k]; i >= 0; i--) {
+        if (nums[i] < preMi) {
+            pre.push_back({preMi, k-i});
+            ret = max(ret, preMi*(k-i));
+            preMi = nums[i];
+        }
+        if (i == 0) {
+            pre.push_back({min(preMi, nums[i]), k-i+1});
+            ret = max(ret, min(preMi, nums[i])*(k-i+1));
+        }
+    }
+    reverse(pre.begin(), pre.end());
+    for (int i = k+1, preMi = nums[k]; i < nums.size(); i++) {
+        if (nums[i] < preMi) {
+            suf.push_back({preMi, i-k});
+            ret = max(ret, preMi*(i-k));
+            preMi = nums[i];
+        }
+        if (i == nums.size()-1) {
+            suf.push_back({min(preMi, nums[i]), i-k+1});
+            ret = max(ret, min(preMi, nums[i])*(i-k+1));
+        }
+    }
+
+    // for (auto x : pre) printf("%d: %d\n", x.first, x.second);
+    // cout << endl;
+    // for (auto x : suf) printf("%d: %d\n", x.first, x.second);
+    // cout << endl;
+
+    if (pre.size() == 0 || suf.size() == 0) return ret;
 
     for (int i = 0; i < suf.size(); i++) {
-        int idx = pre.size()-(lower_bound(pre.begin(), pre.end(), suf[i])-pre.begin());
-        int prod = (idx+i)*suf[i];
+        int idx = lower_bound(pre.begin(), pre.end(), suf[i])-pre.begin();
+        int prod = (pre[min((int)pre.size()-1, idx)].second + suf[i].second - 1) * suf[i].first;
         ret = max(ret, prod);
-        // printf("%d\n", ret);
+        // printf("%d - %d\n", ret, idx);
     }
-    for (int i = k; i >= 0; i--) {
-        int idx = (upper_bound(suf.begin(), suf.end(), pre[i], greater<int>())-suf.begin());
-        int prod = (idx+(k-i))*pre[i];
+    // cout << endl;
+    for (int i = pre.size()-1; i >= 0; i--) {
+        int idx = upper_bound(suf.begin(), suf.end(), pre[i], greater<pair<int, int>>())-suf.begin()-1;
+        int prod = (suf[max(idx, 0)].second + pre[i].second - 1) * pre[i].first;
         ret = max(ret, prod);
-        // printf("%d\n", ret);
+        // printf("%d - %d\n", ret, idx);
     }
-
-    // for (auto x : pre) cout << x << " ";
-    // cout << endl;
-    // for (auto x : suf) cout << x << " ";
-    // cout << endl;
 
     return ret;
 }
 
 int main() {
-    vector<int> v = {1,4,3,7,4,5};
+    vector<int> v = {5,5,4,5,4,1,1,1};
     // 1 4 3 7 4 5
     // 1 3 3 7
     // - - - 7 4 4
-    cout << maximumScore(v, 3);
+    cout << maximumScore(v, 0);
 
     return 0;
 }
