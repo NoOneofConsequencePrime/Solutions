@@ -9,9 +9,6 @@
 #include <numeric>
 using namespace std;
 
-// time - unique
-// space constant, repeat bin search
-
 int minOperations(vector<int>& nums) {
     int len = nums.size(), ret = len;
     sort(nums.begin(), nums.end());
