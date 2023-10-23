@@ -9,26 +9,26 @@
 #include <numeric>
 using namespace std;
 
+// time - unique
+// space constant, repeat bin search
+
 int minOperations(vector<int>& nums) {
-    int len = nums.size(), ret = len, tmp = 0;
+    int len = nums.size(), ret = len;
     sort(nums.begin(), nums.end());
-    unordered_map<int, int> um;
-    for (int a = 0, b = 0; b < len; b++) {
-        while (b > a && nums[b] - nums[a] >= len) {
-            um[nums[a]]--;
-            if (um[nums[a]] == 0) tmp--;
+    for (int a = 0, b = 0, rep = 0; b < nums.size(); b++) {
+        while (b > a && nums[b]-nums[a] >= len) {
+            if (nums[a] == nums[a+1]) rep--;
             a++;
         }
-        um[nums[b]]++;
-        if (um[nums[b]] == 1) tmp++;
-        ret = min(ret, len-tmp);
+        if (b != 0 && nums[b] == nums[b-1]) rep++;
+        ret = min(ret, len-(b-a+1)+rep);
     }
 
     return ret;
 }
 
 int main() {
-    vector<int> v = {4,2,5,3};
+    vector<int> v = {1,10,100,1000};
     cout << minOperations(v);
 
     return 0;
