@@ -9,15 +9,9 @@
 #include <numeric>
 using namespace std;
 
-int cntBits(int n) {
-    if (n == 0) return 0;
-
-    return cntBits(n>>1)+(n&1);
-}
-
 bool cmp(int a, int b) {
-    if (cntBits(a) == cntBits(b)) return a<b;
-    return cntBits(a)<cntBits(b);
+    if (__builtin_popcount(a) == __builtin_popcount(b)) return a<b;
+    return __builtin_popcount(a)<__builtin_popcount(b);
 }
 
 vector<int> sortByBits(vector<int>& arr) {
