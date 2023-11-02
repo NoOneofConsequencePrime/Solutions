@@ -10,15 +10,12 @@
 using namespace std;
 
 bool isAnagram(string s, string t) {
-    unordered_map<char, int> mp;
-    for (char c : s) mp[c]++;
-    for (char c : t) {
-        mp[c]--;
-        if (mp[c] < 0) return false;
-        else if (mp[c] == 0) mp.erase(c);
-    }
+    int cnt[26] = {0};
+    for (char c : s) cnt[c-'a']++;
+    for (char c : t) cnt[c-'a']--;
+    for (int i = 0; i < 26; i++) if (cnt[i]) return false;
 
-    return mp.size() == 0;
+    return true;
 }
 
 int main() {
