@@ -10,11 +10,9 @@
 using namespace std;
 
 int getWinner(vector<int>& arr, int k) {
-    int len = arr.size();
-    for (int i = 0; i < len; i++) arr.push_back(arr[i]);
-
     int ret = arr[0], cnt = 0;
-    for (int i = 1; i < arr.size(); i++) {
+    for (int j = 1; j < arr.size()*2; j++) {
+        int i = j%arr.size();
         if (ret > arr[i]) cnt++;
         else {
             ret = arr[i];
