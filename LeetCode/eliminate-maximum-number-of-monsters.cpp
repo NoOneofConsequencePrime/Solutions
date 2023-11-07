@@ -10,14 +10,13 @@
 using namespace std;
 
 int eliminateMaximum(vector<int>& dist, vector<int>& speed) {
-    vector<int> time;
-    for (int i = 0; i < dist.size(); i++) time.push_back((dist[i]+speed[i]-1)/speed[i]);
-    sort(time.begin(),time.end());
-    for (int i = 0; i < time.size(); i++) {
-        if (time[i] <= i) return i;
+    for (int i = 0; i < dist.size(); i++) dist[i] = (dist[i]+speed[i]-1)/speed[i];
+    sort(dist.begin(), dist.end());
+    for (int i = 0; i < dist.size(); i++) {
+        if (dist[i] <= i) return i;
     }
 
-    return time.size();
+    return dist.size();
 }
 
 int main() {
