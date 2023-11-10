@@ -9,13 +9,16 @@
 #include <numeric>
 using namespace std;
 
-int dp[46];
-
 int climbStairs(int n) {
     if (n <= 2) return n;
-    if (dp[n] != 0) return dp[n];
+    int a = 1, b = 2, c = 0;
+    for (int i = 3; i <= n; i++) {
+        c = a+b;
+        a = b;
+        b = c;
+    }
 
-    return dp[n] = climbStairs(n-1)+climbStairs(n-2);
+    return c;
 }
 
 int main() {
