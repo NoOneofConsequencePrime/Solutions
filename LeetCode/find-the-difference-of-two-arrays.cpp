@@ -10,18 +10,22 @@
 using namespace std;
 
 vector<vector<int>> findDifference(vector<int>& nums1, vector<int>& nums2) {
-    unordered_set<int> st, bk;
+    bool chk[2002] = {false};
     vector<int> a, b;
-    for (auto& x : nums1) st.insert(x);
+    for (auto& x : nums1) chk[x+1000] = true;
     for (auto& x : nums2) {
-        if (!st.count(x) && !bk.count(x)) a.push_back(x);
-        bk.insert(x);
+        if (!chk[x+1000]) {
+            a.push_back(x);
+            chk[x+1000] = true;
+        }
     }
-    st.clear(); bk.clear();
-    for (auto& x : nums2) st.insert(x);
+    memset(chk, false, sizeof(chk));
+    for (auto& x : nums2) chk[x+1000] = true;
     for (auto& x : nums1) {
-        if (!st.count(x) && !bk.count(x)) b.push_back(x);
-        bk.insert(x);
+        if (!chk[x+1000]) {
+            b.push_back(x);
+            chk[x+1000] = true;
+        }
     }
 
     return {b, a};
@@ -30,7 +34,10 @@ vector<vector<int>> findDifference(vector<int>& nums1, vector<int>& nums2) {
 int main() {
     vector<int> a = {1,2,3}, b = {2,4,6};
     vector<vector<int>> ans = findDifference(a, b);
-    for (auto& v : ans) printf("%d %d\n", v[0], v[1]);
+    for (auto& v : ans) {
+        for (auto& x : v) cout << x << " ";
+        cout << endl;
+    }
 
     return 0;
 }
