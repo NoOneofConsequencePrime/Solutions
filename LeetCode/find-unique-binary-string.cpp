@@ -10,32 +10,15 @@
 using namespace std;
 
 string findDifferentBinaryString(vector<string>& nums) {
-    string ret(nums[0].length(), '0');
-    for (int i = 0; i < ret.length(); i++) {
-        int a, b; a = b = 0;
-        for (string& str : nums) {
-            (str[i] == '0')? a++ : b++;
-        }
-        if (b < a) {
-            ret[i] = '1';
-            for (string& str : nums) {
-                if (str[i] == '0') str.clear();
-            }
-        } else {
-            ret[i] = '0';
-            for (string& str : nums) {
-                if (str[i] == '1') str.clear();
-            }
-        }
-    }
-
+    int n = nums.size(); string ret (n, ' ');
+    for (int i = 0; i < n; i++) ret[i] = (nums[i][i] == '0')? '1':'0';
+    
     return ret;
 }
 
 int main() {
     vector<string> v = {"111","011","001"};
     cout << findDifferentBinaryString(v);
-    cout << v[0];
 
     return 0;
 }
