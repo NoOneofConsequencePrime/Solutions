@@ -7,18 +7,20 @@
 #include <deque>
 #include <unordered_set>
 #include <numeric>
+#include <map>
 using namespace std;
 
 int reductionOperations(vector<int>& nums) {
-    if (nums.size() == 1) return 0;
-    sort(nums.begin(), nums.end());
+    map<int, int, greater<int>> mp;
+    for (int& x : nums) mp[x]++;
     
-    int ret = 0;
-    for (int i = nums.size()-2, cnt = 1; i >= 0; i--, cnt++) {
-        if (nums[i] != nums[i+1]) ret += cnt;
+    int ret = 0, tmp = 0;
+    for (auto it = mp.begin(); it != mp.end(); it++) {
+        tmp += (*it).second;
+        ret += tmp;
     }
     
-    return ret;
+    return ret-nums.size();
 }
 
 int main() {
