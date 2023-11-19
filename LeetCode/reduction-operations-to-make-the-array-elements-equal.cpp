@@ -10,22 +10,15 @@
 using namespace std;
 
 int reductionOperations(vector<int>& nums) {
+    if (nums.size() == 1) return 0;
     sort(nums.begin(), nums.end());
-    vector<int> freq; unordered_map<int, int> vi;
-    for (int& x : nums) {
-        if (vi.count(x) == 0) {
-            vi[x] = freq.size();
-            freq.push_back(1);
-        } else freq[vi[x]]++;
-    }
     
     int ret = 0;
-    for (int i = freq.size()-1, tmp = 0; i >= 0; i--) {
-        tmp += freq[i];
-        ret += tmp;
+    for (int i = nums.size()-2, cnt = 1; i >= 0; i--, cnt++) {
+        if (nums[i] != nums[i+1]) ret += cnt;
     }
     
-    return ret-nums.size();
+    return ret;
 }
 
 int main() {
