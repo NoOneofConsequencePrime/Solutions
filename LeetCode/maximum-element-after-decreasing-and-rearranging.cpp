@@ -11,18 +11,19 @@
 using namespace std;
 
 int maximumElementAfterDecrementingAndRearranging(vector<int>& arr) {
-    int n = arr.size(), freq[n+1]; memset(freq, 0, sizeof(freq));
-    for (int x : arr) freq[min(x, n)]++;
+    int n = arr.size(), freq[n]; memset(freq, 0, sizeof(freq));
+    for (int x : arr) freq[min(x, n)-1]++;
 
-    int ret = 0;
-    for (int i = n; i >= 1; i--) {
-        if (freq[i] >= 1) {
-            freq[i-1] += freq[i]-1;
-            ret++;
+    int mx = n, cnt = 0;
+    for (int i = 0; i < mx; i++) {
+        cnt += freq[i];
+        if (cnt > i+1) {
+            mx -= cnt-(i+1);
+            cnt = i+1;
         }
     }
 
-    return ret;
+    return mx;
 }
 
 int main() {
