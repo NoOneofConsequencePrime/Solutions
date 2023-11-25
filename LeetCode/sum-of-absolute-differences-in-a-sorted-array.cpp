@@ -12,14 +12,13 @@ using namespace std;
 
 vector<int> getSumAbsoluteDifferences(vector<int>& nums) {
     int n = nums.size();
-    vector<int> psa; psa.push_back(nums[0]);
-    for (int i = 1; i < n; i++) psa.push_back(psa[i-1]+nums[i]);
+    for (int i = 1; i < n; i++) nums[i] += nums[i-1];
 
     vector<int> ret;
     for (int i = 0; i < n; i++) {
         int sum = 0;
-        if (i < n-1) sum += psa[n-1]-psa[i]-(nums[i]*(n-i-1));
-        if (i > 0) sum += (nums[i]*(i+1))-psa[i];
+        if (i < n-1) sum += nums[n-1]-nums[i]-(i==0? nums[i]:nums[i]-nums[i-1])*(n-i-1);
+        if (i > 0) sum += (nums[i]-nums[i-1])*(i+1)-nums[i];
 
         ret.push_back(sum);
     }
