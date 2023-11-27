@@ -11,19 +11,17 @@
 using namespace std;
 
 string removeStars(string s) {
-    stack<char> stk;
-    for (char c : s) {
-        if (c == '*') stk.pop();
-        else stk.push(c);
-    }
-    
-    string ret(stk.size(), ' ');
-    for (int i = ret.length()-1; i >= 0; i--) {
-        ret[i] = stk.top();
-        stk.pop();
+    int idx = 0;
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == '*') {
+            idx--;
+        } else {
+            s[idx] = s[i];
+            idx++;
+        }
     }
 
-    return ret;
+    return s.substr(0, idx);
 }
 
 int main() {
