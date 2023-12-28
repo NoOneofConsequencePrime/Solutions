@@ -19,13 +19,10 @@ int minCost(string colors, vector<int>& neededTime) {
         if (colors[i] != colors[i-1]) {
             ret += tot-mx;
             mx = neededTime[i]; tot = mx;
-            printf("A: %d", i);
         } else {
             mx = max(mx, neededTime[i]);
             tot += neededTime[i];
-            printf("B: %d", i);
         }
-        printf(" - (%d, %d, %d)\n", mx, tot, ret);
     }
     ret += tot-mx;
 
