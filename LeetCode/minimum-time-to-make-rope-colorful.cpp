@@ -13,18 +13,20 @@ using namespace std;
 int minCost(string colors, vector<int>& neededTime) {
     int n = colors.length();
     if (n == 1) return 0;
-    int ret = 0, mx = neededTime[0], tot = mx;
+    int ret = 0, mx = neededTime[0];
 
     for (int i = 1; i < n; i++) {
         if (colors[i] != colors[i-1]) {
-            ret += tot-mx;
-            mx = neededTime[i]; tot = mx;
+            mx = neededTime[i];
         } else {
-            mx = max(mx, neededTime[i]);
-            tot += neededTime[i];
+            if (mx > neededTime[i]) {
+                ret += neededTime[i];
+            } else {
+                ret += mx;
+                mx = neededTime[i];
+            }
         }
     }
-    ret += tot-mx;
 
     return ret;
 }
