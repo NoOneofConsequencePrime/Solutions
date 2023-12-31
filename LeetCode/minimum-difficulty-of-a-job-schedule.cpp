@@ -39,18 +39,10 @@ int minDifficulty(vector<int>& jobDifficulty, int d) {
         }
     }
 
-    // for (int i = 1; i < d; i++) {
-    //     for (int j = 0; j < n; j++) {
-    //         printf("(%d, %d : %d) ", i, j, dp[i][j]);
-    //     }
-    //     cout << endl;
-    // }
-
     int ret = INT_MAX, mxr = 0;
     for (int i = n-1; i >= d-1; i--) {
         mxr = max(mxr, jobDifficulty[i]);
         ret = min(ret, dp[d-1][i-1]+mxr);
-        // printf("%d: %d\n", i, ret);
     }
 
     return ret;
