@@ -10,22 +10,20 @@
 #include <map>
 using namespace std;
 
-unordered_map<int, int> mp;
-vector<int> n;
-
 int minOperations(vector<int>& nums) {
-    for (int x : nums) {
-        if (mp.count(x) == 0) {
-            mp[x] = 1;
-            n.push_back(x);
-        } else mp[x]++;
+    sort(nums.begin(), nums.end());
+
+    int n = nums.size(), ret = 0, cnt = 1;
+    for (int i = 1; i < n; i++) {
+        if (nums[i] != nums[i-1]) {
+            if (cnt == 1) return -1;
+            ret += cnt/3 + (cnt%3 != 0);
+            cnt = 1;
+        } else cnt++;
     }
 
-    int ret = 0;
-    for (int x : n) {
-        if (mp[x] == 1) return -1;
-        ret += mp[x]/3 + (mp[x]%3 != 0);
-    }
+    if (cnt == 1) return -1;
+    ret += cnt/3 + (cnt%3 != 0);
 
     return ret;
 }
