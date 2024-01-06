@@ -12,21 +12,18 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-const int MM = 2502;
-int dp[MM];
-
 int lengthOfLIS(vector<int>& nums) {
-    fill(dp, dp+MM, 1);
-    int n = nums.size(), ret = 1;
-
-    for (int i = 2; i < n; i++) {
-        for (int j = 0; j < i; j++) {
-            if (nums[i] > nums[j]) dp[i] = max(dp[i], dp[j]+1);
+    vector<int> v = {nums[0]};
+    int n = nums.size();
+    for (int i = 1; i < n; i++) {
+        if (v.back() < nums[i]) v.push_back(nums[i]);
+        else {
+            int lb = lower_bound(v.begin(), v.end(), nums[i])-v.begin();
+            v[lb] = nums[i];
         }
-        ret = max(ret, dp[i]);
     }
 
-    return ret;
+    return v.size();
 }
 
 int main() {
