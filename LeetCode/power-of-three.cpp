@@ -13,10 +13,7 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 bool isPowerOfThree(int n) {
-    if (n < 3) return n==1;
-    else if (n%3 != 0) return false;
-
-    return isPowerOfThree(n/3);
+    return (n>0) && !(1162261467%n);
 }
 
 int main() {
