@@ -13,18 +13,18 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 const int mx = 500;
-unordered_map<int, int> mp;
+int cnt[mx+2];
 
 int longestArithSeqLength(vector<int>& nums) {
     int ret = 0;
     for (int chg = -mx; chg <= mx; chg++) {
-        mp.clear();
+        memset(cnt, 0, sizeof(cnt));
         for (int x : nums) {
-            if (mp.count(x-chg) != 0) {
-                mp[x] = max(mp[x], mp[x-chg]+1);
-                ret = max(ret, mp[x]);
+            if (x-chg >= 0 && x-chg <= 500 && cnt[x-chg] != 0) {
+                cnt[x] = max(cnt[x], cnt[x-chg]+1);
+                ret = max(ret, cnt[x]);
             }
-            if (mp.count(x) == 0) mp[x] = 1;
+            if (cnt[x] == 0) cnt[x] = 1;
         }
     }
 
@@ -32,7 +32,7 @@ int longestArithSeqLength(vector<int>& nums) {
 }
 
 int main() {
-    vector<int> v = {20,1,15,3,10,5,8};
+    vector<int> v = {24,13,1,100,0,94,3,0,3};
     cout << longestArithSeqLength(v);
 
     return 0;
