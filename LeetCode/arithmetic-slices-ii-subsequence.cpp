@@ -13,7 +13,7 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 const int MM = 1002;
-unordered_map<uint, vector<int>> dp[MM];
+unordered_map<int, int> dp[MM];
 
 int numberOfArithmeticSlices(vector<int>& nums) {
     int n = nums.size(), ret = 0;
@@ -21,14 +21,12 @@ int numberOfArithmeticSlices(vector<int>& nums) {
         for (int j = 0; j < i; j++) {
             long long chg = (long long)nums[i]-nums[j];
             if (chg > INT_MAX || chg < INT_MIN) continue;
+
+            dp[i][chg]++;
             if (dp[j].count(chg) != 0) {
-                int tmp = 0;
-                for (int x : dp[j][chg]) {
-                    tmp += x+1;
-                    ret += x+1;
-                }
-                dp[i][chg].push_back(tmp);
-            } else dp[i][chg].push_back(0);
+                dp[i][chg] += dp[j][chg];
+                ret += dp[j][chg];
+            }
         }
     }
 
@@ -36,7 +34,7 @@ int numberOfArithmeticSlices(vector<int>& nums) {
 }
 
 int main() {
-    vector<int> v (1000,1000);
+    vector<int> v = {2,2,3,4};
     cout << numberOfArithmeticSlices(v);
 
     return 0;
