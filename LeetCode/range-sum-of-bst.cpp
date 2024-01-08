@@ -15,8 +15,8 @@ using namespace std;
 int rangeSumBST(TreeNode* root, int low, int high) {
     int ret = 0;
     if (root->val >= low && root->val <= high) ret = root->val;
-    if (root->left != NULL) ret += rangeSumBST(root->left, low, high);
-    if (root->right != NULL) ret += rangeSumBST(root->right, low, high);
+    if (root->left != NULL && root->val >= low) ret += rangeSumBST(root->left, low, high);
+    if (root->right != NULL && root->val <= high) ret += rangeSumBST(root->right, low, high);
 
     return ret;
 }
