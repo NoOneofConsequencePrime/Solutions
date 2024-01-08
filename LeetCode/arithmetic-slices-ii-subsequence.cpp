@@ -12,7 +12,7 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-unordered_map<long long, int> mp;
+unordered_map<long long, vector<long long>> mp;
 unordered_map<int, int> cnt;
 
 long long hsh(long long a, long long b, int c) {// val, chg
@@ -27,11 +27,9 @@ int numberOfArithmeticSlices(vector<int>& nums) {
             if (chg == 0) continue;
             // printf("%lld, %d\n", hsh(nums[j], chg, j), mp[hsh(nums[j], chg, j)]);
             if (mp.count(hsh(nums[j], chg, j)) != 0) {
-                mp[hsh(nums[i], chg, i)] = mp[hsh(nums[j], chg, j)]+1;
-                ret += max(0, mp[hsh(nums[i], chg, i)]-2);
-                printf("%d %d %d\n", i, j, mp[hsh(nums[i], chg, i)]-2);
+                for (int x : mp[hsh(nums[j], chg, j)]) mp[hsh(nums[i], chg, i)].push_back(x+1);
             }
-            if (mp.count(hsh(nums[i], chg, i)) == 0) mp[hsh(nums[i], chg, i)] = 2;
+            mp[hsh(nums[i], chg, i)].push_back(0);
         }
         cnt[nums[i]]++;
     }
@@ -45,12 +43,17 @@ int numberOfArithmeticSlices(vector<int>& nums) {
         }
         ret += sum;
     }
+    for (auto& [key, v] : mp) {
+        for (long long x : v) {
+            ret += x*(x+1)/2;
+        }
+    }
 
     return ret;
 }
 
 int main() {
-    vector<int> v(1000, 1000);
+    vector<int> v = {2,4,6,8,10};
     //  234
     // 1234
     // 1 34
