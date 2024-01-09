@@ -12,24 +12,24 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-void getLeafSeq(TreeNode* root, vector<int>& v) {
-    if (root->left == NULL && root->right == NULL) {
-        v.push_back(root->val);
-        return;
+vector<int> getLeafSeq(TreeNode* root) {
+    vector<int> ret;
+    stack<TreeNode*> stk; stk.push(root);
+    while (!stk.empty()) {
+        TreeNode* cur = stk.top(); stk.pop();
+        if (!cur->left && !cur->right) {ret.push_back(cur->val);}
+        if (cur->left) {stk.push(cur->left);}
+        if (cur->right) {stk.push(cur->right);}
     }
-    if (root->left != NULL) getLeafSeq(root->left, v);
-    if (root->right != NULL) getLeafSeq(root->right, v);
+
+    return ret;
 }
 
 bool leafSimilar(TreeNode* root1, TreeNode* root2) {
-    vector<int> a, b;
-    getLeafSeq(root1, a); getLeafSeq(root2, b);
-    if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != b[i]) return false;
-    }
-
-    return true;
+    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    vector<int> a = getLeafSeq(root1), b = getLeafSeq(root2);
+    
+    return a == b;
 }
 
 int main() {
