@@ -22,19 +22,11 @@ vector<vector<string>> groupAnagrams(vector<string>& strs) {
         sort(str.begin(), str.end());
         um[str].push_back(tmp);
     }
-    sort(strs.begin(), strs.end());
 
     vector<vector<string>> ret;
-    for (int i = 1; i < n; i++) {
-        if (strs[i] != strs[i-1]) {
-            vector<string> tmp;
-            for (string& str : um[strs[i-1]]) tmp.push_back(str);
-            ret.push_back(tmp);
-        }
+    for (auto& [key, v] : um) {
+        ret.push_back(v);
     }
-    vector<string> tmp;
-    for (string& str : um[strs[n-1]]) tmp.push_back(str);
-    ret.push_back(tmp);
 
     return ret;
 }
