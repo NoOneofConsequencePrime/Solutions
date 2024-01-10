@@ -13,22 +13,22 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 const int MM = 1e5+2;
-unordered_map<TreeNode*, TreeNode*> pa;
+TreeNode* pa[MM];
 int vst[MM];
 
 int amountOfTime(TreeNode* root, int start) {
+    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
     stack<TreeNode*> stk; stk.push(root);
     TreeNode* str = NULL;
     while (!stk.empty()) {
         TreeNode* u = stk.top(); stk.pop();
-        if (!u) {continue;}
         if (u->val == start) {str = u;}
         if (u->left) {
-            pa[u->left] = u;
+            pa[u->left->val] = u;
             stk.push(u->left);
         }
         if (u->right) {
-            pa[u->right] = u;
+            pa[u->right->val] = u;
             stk.push(u->right);
         }
     }
@@ -38,7 +38,6 @@ int amountOfTime(TreeNode* root, int start) {
     queue<TreeNode*> q; q.push(str); vst[start] = 0;
     while (!q.empty()) {
         TreeNode* u = q.front(); q.pop();
-        if (!u) continue;
         ret = max(ret, vst[u->val]);
 
         if (u->left && vst[u->left->val] < 0) {
@@ -49,9 +48,9 @@ int amountOfTime(TreeNode* root, int start) {
             vst[u->right->val] = vst[u->val]+1;
             q.push(u->right);
         }
-        if (pa.count(u) != 0 && vst[pa[u]->val] < 0) {
-            vst[pa[u]->val] = vst[u->val]+1;
-            q.push(pa[u]);
+        if (pa[u->val] && vst[pa[u->val]->val] < 0) {
+            vst[pa[u->val]->val] = vst[u->val]+1;
+            q.push(pa[u->val]);
         }
     }
 
