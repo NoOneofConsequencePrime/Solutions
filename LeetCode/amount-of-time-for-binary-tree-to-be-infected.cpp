@@ -13,35 +13,45 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 const int MM = 1e5+2;
-vector<int> adj[MM];
-bool vst[MM];
+unordered_map<TreeNode*, TreeNode*> pa;
+int vst[MM];
 
 int amountOfTime(TreeNode* root, int start) {
-    queue<TreeNode*> q; q.push(root);
-    while (!q.empty()) {
-        TreeNode* u = q.front(); q.pop();
+    stack<TreeNode*> stk; stk.push(root);
+    TreeNode* str = NULL;
+    while (!stk.empty()) {
+        TreeNode* u = stk.top(); stk.pop();
+        if (!u) {continue;}
+        if (u->val == start) {str = u;}
         if (u->left) {
-            adj[u->left->val].push_back(u->val);
-            adj[u->val].push_back(u->left->val);
-            q.push(u->left);
+            pa[u->left] = u;
+            stk.push(u->left);
         }
         if (u->right) {
-            adj[u->right->val].push_back(u->val);
-            adj[u->val].push_back(u->right->val);
-            q.push(u->right);
+            pa[u->right] = u;
+            stk.push(u->right);
         }
     }
 
-    queue<pair<int, int>> nq; nq.push({start, 0}); vst[start] = true;
+    memset(vst, -0x3f, sizeof(vst));
     int ret = 0;
-    while (!nq.empty()) {
-        pair<int, int> u = nq.front(); nq.pop();
-        ret = max(ret, u.second);
-        for (int x : adj[u.first]) {
-            if (!vst[x]) {
-                nq.push({x, u.second+1});
-                vst[x] = true;
-            }
+    queue<TreeNode*> q; q.push(str); vst[start] = 0;
+    while (!q.empty()) {
+        TreeNode* u = q.front(); q.pop();
+        if (!u) continue;
+        ret = max(ret, vst[u->val]);
+
+        if (u->left && vst[u->left->val] < 0) {
+            vst[u->left->val] = vst[u->val]+1;
+            q.push(u->left);
+        }
+        if (u->right && vst[u->right->val] < 0) {
+            vst[u->right->val] = vst[u->val]+1;
+            q.push(u->right);
+        }
+        if (pa.count(u) != 0 && vst[pa[u]->val] < 0) {
+            vst[pa[u]->val] = vst[u->val]+1;
+            q.push(pa[u]);
         }
     }
 
