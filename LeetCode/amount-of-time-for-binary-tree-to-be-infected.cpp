@@ -12,46 +12,38 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
+const int MM = 1e5+2;
+vector<int> adj[MM];
+unordered_set<int> vst;
+
 int amountOfTime(TreeNode* root, int start) {
-    int hi = 0, lo = 0, startVal = 0, mid = 0;
-    bool flag = false;
-    while ((root->left != NULL) != (root->right != NULL)) {
-        if (root->val == start) {startVal = mid; flag = true;}
-        if (root->left) {root = root->left;}
-        else {root = root->right;}
-        mid++;
-    }
-    startVal = mid-startVal;
-    queue<pair<TreeNode*, int>> q; q.push({root, 0});
+    queue<TreeNode*> q; q.push(root);
     while (!q.empty()) {
-        pair<TreeNode*, int> u = q.front(); q.pop();
-        lo = min(lo, u.second); hi = max(hi, u.second);
-
-        if (u.first->val == start) {
-            startVal = u.second;
+        TreeNode* u = q.front(); q.pop();
+        if (u->left) {
+            adj[u->left->val].push_back(u->val);
+            adj[u->val].push_back(u->left->val);
+            q.push(u->left);
         }
-        if (u.second < 0) {
-            if (u.first->left) {q.push({u.first->left, u.second-1});}
-            if (u.first->right) {q.push({u.first->right, u.second-1});}
-        } else if (u.second > 0) {
-            if (u.first->left) {q.push({u.first->left, u.second+1});}
-            if (u.first->right) {q.push({u.first->right, u.second+1});}
-        }
-        if (u.second == 0) {
-            if (u.first->left) {q.push({u.first->left, -1});}
-            if (u.first->right) {q.push({u.first->right, 1});}
+        if (u->right) {
+            adj[u->right->val].push_back(u->val);
+            adj[u->val].push_back(u->right->val);
+            q.push(u->right);
         }
     }
 
-    printf("%d %d %d %d %d\n", lo, hi, mid, startVal, flag);
-
+    queue<pair<int, int>> nq; nq.push({start, 0}); vst.insert(start);
     int ret = 0;
-    if (mid == 0) {ret = max(hi-startVal, startVal-lo);}
-    else {
-        if (flag) {ret = max(startVal+max(-lo, hi), max(mid-startVal, startVal));}
-        else {ret = max(mid+abs(startVal), max(hi-startVal, startVal-lo));}
+    while (!nq.empty()) {
+        pair<int, int> u = nq.front(); nq.pop();
+        ret = max(ret, u.second);
+        for (int x : adj[u.first]) {
+            if (vst.count(x) == 0) {
+                nq.push({x, u.second+1});
+                vst.insert(x);
+            }
+        }
     }
-    // if (lo != hi) {ret = max(ret, mid+abs(startVal));}
 
     return ret;
 }
