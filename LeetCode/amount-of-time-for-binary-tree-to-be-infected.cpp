@@ -14,7 +14,7 @@ using namespace std;
 
 const int MM = 1e5+2;
 vector<int> adj[MM];
-unordered_set<int> vst;
+bool vst[MM];
 
 int amountOfTime(TreeNode* root, int start) {
     queue<TreeNode*> q; q.push(root);
@@ -32,15 +32,15 @@ int amountOfTime(TreeNode* root, int start) {
         }
     }
 
-    queue<pair<int, int>> nq; nq.push({start, 0}); vst.insert(start);
+    queue<pair<int, int>> nq; nq.push({start, 0}); vst[start] = true;
     int ret = 0;
     while (!nq.empty()) {
         pair<int, int> u = nq.front(); nq.pop();
         ret = max(ret, u.second);
         for (int x : adj[u.first]) {
-            if (vst.count(x) == 0) {
+            if (!vst[x]) {
                 nq.push({x, u.second+1});
-                vst.insert(x);
+                vst[x] = true;
             }
         }
     }
