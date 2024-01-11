@@ -14,34 +14,29 @@ using namespace std;
 
 #define f first
 #define s second
-typedef pair<int, pair<int, int>> p;
-
-p getMaxDiff(TreeNode* root) {
-    if (!root->left && !root->right) return {0, {root->val, root->val}};
-
-    p ret = {0, {INT_MAX, INT_MIN}};
-    if (root->left) {
-        p tmp = getMaxDiff(root->left);
-        ret.f = max(ret.f, max(tmp.f, abs(root->val - root->left->val)));
-        ret.s.f = min(ret.s.f, min(tmp.s.f, root->left->val));
-        ret.s.s = max(ret.s.s, max(tmp.s.s, root->left->val));
-    }
-    if (root->right) {
-        p tmp = getMaxDiff(root->right);
-        ret.f = max(ret.f, max(tmp.f, abs(root->val - root->right->val)));
-        ret.s.f = min(ret.s.f, min(tmp.s.f, root->right->val));
-        ret.s.s = max(ret.s.s, max(tmp.s.s, root->right->val));
-    }
-
-    ret.f = max(ret.f, max(abs(root->val - ret.s.f), abs(root->val - ret.s.s)));
-
-    return ret;
-}
+typedef pair<TreeNode*, pair<int, int>> p;
 
 int maxAncestorDiff(TreeNode* root) {
-    p maxDiff = getMaxDiff(root);
+    int ret = 0;
+    queue<p> q; q.push({root, {root->val, root->val}});
+    while (!q.empty()) {
+        p u = q.front(); q.pop();
+        ret = max(ret, max(abs(u.f->val - u.s.f), abs(u.f->val - u.s.s)));
+        if (u.f->left) {
+            p tmp = {u.f->left, {INT_MAX, INT_MIN}};
+            tmp.s.f = min(u.s.f, u.f->val);
+            tmp.s.s = max(u.s.s, u.f->val);
+            q.push(tmp);
+        }
+        if (u.f->right) {
+            p tmp = {u.f->right, {INT_MAX, INT_MIN}};
+            tmp.s.f = min(u.s.f, u.f->val);
+            tmp.s.s = max(u.s.s, u.f->val);
+            q.push(tmp);
+        }
+    }
 
-    return maxDiff.f;
+    return ret.f;
 }
 
 int main() {
