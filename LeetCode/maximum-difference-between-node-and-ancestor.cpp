@@ -15,9 +15,9 @@ using namespace std;
 int dfs(TreeNode* root, int mx, int mi) {
     if (!root) {return mx-mi;}
 
-    int tmpMx = max(root->val, mx), tmpMi = min(root->val, mi);
+    mx = max(root->val, mx); mi = min(root->val, mi);
 
-    return max(dfs(root->left, tmpMx, tmpMi), dfs(root->right, tmpMx, tmpMi));
+    return max(dfs(root->left, mx, mi), dfs(root->right, mx, mi));
 }
 
 int maxAncestorDiff(TreeNode* root) {
