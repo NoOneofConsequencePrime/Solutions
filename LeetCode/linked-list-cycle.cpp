@@ -12,13 +12,14 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-unordered_set<ListNode*> st;
-
 bool hasCycle(ListNode *head) {
-    while (head) {
-        if (st.count(head) != 0) return true;
-        st.insert(head);
-        head = head->next;
+    if (!head) return false;
+    ListNode *a = head, *b = head->next;
+    while (a && b) {
+        if (a == b) return true;
+        a = a->next;
+        if (!b->next) break;
+        b = b->next->next;
     }
 
     return false;
