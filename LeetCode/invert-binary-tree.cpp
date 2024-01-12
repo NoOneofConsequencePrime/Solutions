@@ -14,8 +14,9 @@ using namespace std;
 
 TreeNode* invertTree(TreeNode* root) {
     if (!root) return nullptr;
-    swap(root->left, root->right);
-    invertTree(root->left); invertTree(root->right);
+    TreeNode* tmpNode = root->left;
+    root->left = invertTree(root->right);
+    root->right = invertTree(tmpNode);
 
     return root;
 }
