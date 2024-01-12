@@ -12,15 +12,18 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-bool isSame(TreeNode* nodeA, TreeNode* nodeB) {
-    if (!nodeA != !nodeB) return false;
-    if (!nodeA && !nodeB) return true;
-
-    return (nodeA->val == nodeB->val) && isSame(nodeA->left, nodeB->right) && isSame(nodeA->right, nodeB->left);
-}
-
 bool isSymmetric(TreeNode* root) {
-    return isSame(root->left, root->right);
+    queue<pair<TreeNode*, TreeNode*>> q; q.push({root->left, root->right});
+    bool ret = true;
+    while (!q.empty()) {
+        auto [nodeA, nodeB] = q.front(); q.pop();
+
+        if (!nodeA && !nodeB) continue;
+        if (!nodeA != !nodeB || nodeA->val != nodeB->val) return false;
+        q.push({nodeA->left, nodeB->right}); q.push({nodeA->right, nodeB->left});
+    }
+
+    return ret;
 }
 
 int main() {
