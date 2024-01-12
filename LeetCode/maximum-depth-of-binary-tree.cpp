@@ -13,9 +13,17 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 int maxDepth(TreeNode* root) {
-    if (!root) {return 0;}
-    
-    return max(maxDepth(root->left), maxDepth(root->right))+1;
+    if (!root) return 0;
+    queue<pair<TreeNode*, int>> q; q.push({root, 1});
+    int ret = INT_MIN;
+    while (!q.empty()) {
+        auto [curNode, val] = q.front(); q.pop();
+        ret = max(ret, val);
+        if (curNode->left) {q.push({curNode->left, val+1});}
+        if (curNode->right) {q.push({curNode->right, val+1});}
+    }
+
+    return ret;
 }
 
 int main() {
