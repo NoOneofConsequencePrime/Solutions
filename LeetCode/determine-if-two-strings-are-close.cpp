@@ -13,7 +13,7 @@ using namespace std;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 int cnt1[30], cnt2[30];
-unordered_map<int, int> mp1, mp2;
+unordered_map<int, int> mp;
 
 bool closeStrings(string word1, string word2) {
     if (word1.length() != word2.length()) return false;
@@ -26,16 +26,11 @@ bool closeStrings(string word1, string word2) {
         if (cnt1[i]>0 && cnt2[i]==0) {return false;}
         if (cnt1[i]==0 && cnt2[i]>0) {return false;}
 
-        if (cnt1[i] > 0) {mp1[cnt1[i]]++;}
-        if (cnt2[i] > 0) {mp2[cnt2[i]]++;}
+        if (cnt1[i] > 0) {mp[cnt1[i]]++;}
+        if (cnt2[i] > 0) {mp[cnt2[i]]--;}
     }
 
-    for (auto [f, s] : mp1) {
-        if (mp1.count(f)==0) {return false;}
-        if (mp2[f] != s) {return false;}
-        mp2[f] -= s;
-    }
-    for (auto [f, s] : mp2) {
+    for (auto [f, s] : mp) {
         if (s != 0) {return false;}
     }
 
