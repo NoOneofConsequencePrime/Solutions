@@ -12,13 +12,12 @@ using namespace std;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-unordered_set<int> st;
 bool containsDuplicate(vector<int>& nums) {
-    for (int x : nums) {
-        if (st.count(x) != 0) {return true};
-        st.insert(x);
+    sort(nums.begin(), nums.end());
+    for (int i = 1; i < nums.size(); i++) {
+        if (nums[i] == nums[i-1]) {return true;}
     }
-
+    
     return false;
 }
 
