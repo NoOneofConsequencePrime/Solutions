@@ -21,10 +21,18 @@ typedef pair<ll, ll> pll;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
+const int MM = 2e4+5;
+int cnt[MM];
+
 int findKthLargest(vector<int>& nums, int k) {
-    sort(nums.begin(), nums.end());
-    
-    return nums[nums.size()-k];
+    for (int x : nums) {cnt[x+(int)1e4]++;}
+    for (int i = MM-1; i >= 0; i--) {
+        if (!cnt[i]) {continue;}
+        else if (k-cnt[i] > 0) {k -= cnt[i];}
+        else {return i-1e4;}
+    }
+
+    return INT_MIN;
 }
 
 int main() {
