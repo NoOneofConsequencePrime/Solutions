@@ -21,15 +21,19 @@ typedef pair<ll, ll> pll;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-const int MM = 2e4+5;
-int cnt[MM];
+unordered_map<int, int> mp;
 
 int findKthLargest(vector<int>& nums, int k) {
-    for (int x : nums) {cnt[x+(int)1e4]++;}
-    for (int i = MM-1; i >= 0; i--) {
-        if (!cnt[i]) {continue;}
-        else if (k-cnt[i] > 0) {k -= cnt[i];}
-        else {return i-1e4;}
+    int mx = INT_MIN, mi = INT_MAX;
+    for (int x : nums) {
+        mp[x]++;
+        mx = max(mx, x);
+        mi = min(mi, x);
+    }
+    for (int i = mx; i >= mi; i--) {
+        if (!mp.count(i)) {continue;}
+        else if (k-mp[i] > 0) {k -= mp[i];}
+        else {return i;}
     }
 
     return INT_MIN;
