@@ -28,9 +28,9 @@ int coinChange(vector<int>& coins, int amount) {
     memset(dp, 0x3f, sizeof(dp));
     int n = coins.size();
     dp[0] = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = 1; j <= amount; j++) {
-            if (j-coins[i] >= 0) {dp[j] = min(dp[j], dp[j-coins[i]]+1);}
+    for (int val : coins) {
+        for (int i = 1; i <= amount; i++) {
+            if (i-val >= 0) {dp[i] = min(dp[i], dp[i-val]+1);}
         }
     }
 
