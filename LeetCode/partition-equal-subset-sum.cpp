@@ -22,22 +22,19 @@ typedef pair<ll, ll> pll;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 const int MM = 1e4+2;
-bool dp[MM];
 
 bool canPartition(vector<int>& nums) {
-    int sum = 0;
-    for (int x : nums) {sum += x;}
+    int sum = accumulate(nums.begin(), nums.end(), 0);
     if (sum%2) {return false;}
     sum /= 2;
+    bitset<MM> bst(1);
 
-    dp[0] = true;
     for (int num : nums) {
-        for (int i = sum; i >= 1; i--) {
-            if (i-num >= 0 && dp[i-num]) {dp[i] = true;}
-        }
+        bst |= bst<<num;
+        if (bst[sum]) {return true;}
     }
 
-    return dp[sum];
+    return false;
 }
 
 int main() {
