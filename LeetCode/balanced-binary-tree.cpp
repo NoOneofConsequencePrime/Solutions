@@ -21,17 +21,20 @@ typedef pair<ll, ll> pll;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-int getDepth(TreeNode* cur) {
-    if (!cur) {return -1;}
+int chkBalanced(TreeNode* root, bool &chk) {
+    if (!root || !chk) {return -1;}
 
-    return max(getDepth(cur->left), getDepth(cur->right))+1;
+    int l = chkBalanced(root->left, chk), r = chkBalanced(root->right, chk);
+    if (abs(l-r) > 1) {chk = false;}
+
+    return max(l, r)+1;
 }
 
 bool isBalanced(TreeNode* root) {
-    if (!root) {return true;}
-    if (abs(getDepth(root->left)-getDepth(root->right)) > 1) {return false;}
+    bool ret = true;
+    chkBalanced(root, ret);
 
-    return isBalanced(root->left) && isBalanced(root->right);
+    return ret;
 }
 
 int main() {
