@@ -25,18 +25,18 @@ const int M = 1e9+7;
 
 int sumSubarrayMins(vector<int>& arr) {
     int n = arr.size(), ret = 0;
-    vector<int> dp(n, 0);
-    stack<int> stk;
+    stack<pii> stk;
     for (int i = 0; i < n; i++) {
-        while (!stk.empty() && arr[stk.top()]>arr[i]) {stk.pop();}
+        while (!stk.empty() && arr[stk.top().f]>arr[i]) {stk.pop();}
         if (stk.empty()) {
-            ret = ((dp[i]=arr[i]*(i+1)%M)+ret)%M;
+            ret = ((arr[i]*(i+1)%M)+ret)%M;
+            stk.push({i, arr[i]*(i+1)%M});
         } else {
-            dp[i] += arr[i]*(i-stk.top())%M;
-            dp[i] = (dp[i]+dp[stk.top()])%M;
-            ret = (dp[i]+ret)%M;
+            int tmp = arr[i]*(i-stk.top().f)%M;
+            tmp = (tmp+stk.top().s)%M;
+            ret = (ret+tmp)%M;
+            stk.push({i, tmp});
         }
-        stk.push(i);
     }
 
     return ret;
