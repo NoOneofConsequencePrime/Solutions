@@ -21,31 +21,25 @@ typedef pair<ll, ll> pll;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
+const int M = 1e9+7;
+
 int sumSubarrayMins(vector<int>& arr) {
-    int n = arr.size();
-    vector<ll> prevMi(n), dp(n, 0);
-    stack<pii> stk;
+    int n = arr.size(), ret = 0;
+    vector<int> dp(n, 0);
+    stack<int> stk;
     for (int i = 0; i < n; i++) {
-        while (!stk.empty() && stk.top().f>arr[i]) {stk.pop();}
+        while (!stk.empty() && arr[stk.top()]>arr[i]) {stk.pop();}
         if (stk.empty()) {
-            prevMi[i] = -1;
+            ret = ((dp[i]=arr[i]*(i+1)%M)+ret)%M;
         } else {
-            prevMi[i] = stk.top().s;
+            dp[i] += arr[i]*(i-stk.top())%M;
+            dp[i] = (dp[i]+dp[stk.top()])%M;
+            ret = (dp[i]+ret)%M;
         }
-        stk.push({arr[i], i});
+        stk.push(i);
     }
 
-    ll ret = 0;
-    for (int i = 0; i < n; i++) {
-        if (prevMi[i] == -1) {ret += dp[i]=(ll)arr[i]*(i+1);}
-        else {
-            dp[i] += (ll)arr[i]*(i-prevMi[i]);
-            dp[i] += dp[prevMi[i]];
-            ret += dp[i];
-        }
-    }
-
-    return ret%(ll)(1e9+7);
+    return ret;
 }
 
 int main() {
