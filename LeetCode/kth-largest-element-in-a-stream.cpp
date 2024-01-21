@@ -25,17 +25,14 @@ int n;
 priority_queue<int, vector<int>, greater<int>> pq;
 
 KthLargest(int k, vector<int>& nums) {
-    n = k;
-    sort(nums.begin(), nums.end());
-    for (int i = 0; i < k && i < nums.size(); i++) {pq.push(nums[nums.size()-i-1]);}
+    this->k = k;
+    for (int x : nums) {pq.push(x);}
+    while (pq.size() > k) {pq.pop();}
 }
 
 int add(int val) {
-    if (pq.size() < n) {pq.push(val);}
-    else if (val > pq.top()) {
-        pq.pop();
-        pq.push(val);
-    }
+    pq.push(val);
+    if (pq.size() > k) {pq.pop();}
     
     return pq.top();
 }
