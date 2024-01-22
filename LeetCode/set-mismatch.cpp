@@ -23,11 +23,14 @@ typedef pair<ll, ll> pll;
 
 vector<int> findErrorNums(vector<int>& nums) {
     int n = nums.size();
-    sort(nums.begin(), nums.end());
-    vector<int> ret = {0, n*(n+1)/2-nums[0]};
-    for (int i = 1; i < n; i++) {
-        if (nums[i] == nums[i-1]) {ret[0] = nums[i];}
-        else {ret[1] -= nums[i];}
+    vector<int> ret = {0, n*(n+1)/2};
+    for (int x : nums) {
+        int idx = abs(x)-1;
+        if (nums[idx] < 0) {ret[0] = abs(x);}
+        else {
+            nums[idx] *= -1;
+            ret[1] -= abs(x);
+        }
     }
 
     return ret;
