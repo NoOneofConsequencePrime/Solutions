@@ -23,22 +23,18 @@ typedef pair<ll, ll> pll;
 
 vector<int> findErrorNums(vector<int>& nums) {
     int n = nums.size();
-    vector<int> ret = {0, n*(n+1)/2};
-    vector<bool> chk(n+1, false);
-    for (int x : nums) {
-        if (!chk[x]) {
-            chk[x] = true;
-            ret[1] -= x;
-        } else {
-            ret[0] = x;
-        }
+    sort(nums.begin(), nums.end());
+    vector<int> ret = {0, n*(n+1)/2-nums[0]};
+    for (int i = 1; i < n; i++) {
+        if (nums[i] == nums[i-1]) {ret[0] = nums[i];}
+        else {ret[1] -= nums[i];}
     }
 
     return ret;
 }
 
 int main() {
-    vector<int> v = {1,1};
+    vector<int> v = {1,2,2,4};
     vector<int> ans = findErrorNums(v);
     printf("%d %d\n", ans[0], ans[1]);
 
