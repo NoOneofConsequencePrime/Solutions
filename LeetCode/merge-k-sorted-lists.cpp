@@ -21,34 +21,34 @@ typedef pair<ll, ll> pll;
 
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
-bool cmp(ListNode* a, ListNode* b) {
-    return a->val < b->val;
-}
-
-void listAdd(ListNode* node, vector<ListNode*> &v) {
-    if (!node) {return;}
-    v.push_back(node);
-    listAdd(node->next, v);
+ListNode* simpleMerge(ListNode *a, ListNode *b) {
+    ListNode *tmpHead = new ListNode(), *cur = tmpHead;
+    while (a && b) {
+        if (a->val < b->val) {
+            cur->next = a;
+            cur = cur->next;
+            a = a->next;
+        } else {
+            cur->next = b;
+            cur = cur->next;
+            b = b->next;
+        }
+    }
+    if (a) {cur->next = a;}
+    else {cur->next = b;}
+    
+    ListNode *ret = tmpHead->next;
+    delete tmpHead;
+    return ret;
 }
 
 ListNode* mergeKLists(vector<ListNode*>& lists) {
-    vector<ListNode*> v;
-    for (auto x : lists) {
-        listAdd(x, v);
+    if (lists.empty()) {return nullptr;}
+    for (int i = 1; i < lists.size(); i++) {
+        lists[0] = simpleMerge(lists[0], lists[i]);
     }
-    sort(v.begin(), v.end(), cmp);
 
-    ListNode *tmpHead = new ListNode(), *cur = tmpHead;
-    for (auto x : v) {
-        cur->next = x;
-        cur = cur->next;
-    }
-    cur->next = nullptr;
-
-    cur = tmpHead->next;
-    delete tmpHead;
-
-    return cur;
+    return lists[0];
 }
 
 int main() {
