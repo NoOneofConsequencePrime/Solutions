@@ -25,23 +25,25 @@ static const int M = 1e9+7;
 int mx[4] = {1,-1,0,0}, my[4] = {0,0,1,-1};
 
 int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-    vector<vector<vector<ll>>> dp(n, vector<vector<ll>>(m, vector<ll>(maxMove+1, 0)));
+    vector<vector<vector<ll>>> dp(2, vector<vector<ll>>(n, vector<ll>(m, 0)));
     for (int idx = 1; idx <= maxMove; idx++) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
+                dp[1][i][j] = 0;
                 for (int k = 0; k < 4; k++) {
                     int dx = i+mx[k], dy = j+my[k];
                     if (dx>=0 && dx<n) {
-                        if (dy>=0 && dy<m) {dp[i][j][idx] += dp[dx][dy][idx-1];}
-                        else {dp[i][j][idx]++;}
-                    } else {dp[i][j][idx]++;}
+                        if (dy>=0 && dy<m) {dp[1][i][j] += dp[0][dx][dy];}
+                        else {dp[1][i][j]++;}
+                    } else {dp[1][i][j]++;}
                 }
-                dp[i][j][idx] %= M;
+                dp[1][i][j] %= M;
             }
         }
+        swap(dp[0], dp[1]);
     }
 
-    return dp[startColumn][startRow][maxMove];
+    return dp[0][startColumn][startRow];
 }
 
 int main() {
