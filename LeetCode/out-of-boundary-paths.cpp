@@ -24,27 +24,24 @@ typedef pair<ll, ll> pll;
 const int M = 1e9+7;
 const int MM = 52;
 int mx[4] = {1,-1,0,0}, my[4] = {0,0,1,-1};
-int dp[2][MM][MM];
+int dp[MM][MM][MM];
 
-int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-    for (int idx = 1; idx <= maxMove; idx++) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                for (int k = 0; k < 4; k++) {
-                    int dx = i+mx[k], dy = j+my[k];
-                    if (dx>=0 && dx<n) {
-                        if (dy>=0 && dy<m) {dp[1][i][j] = (dp[1][i][j]+dp[0][dx][dy])%M;}
-                        else {dp[1][i][j]++;}
-                    } else {dp[1][i][j]++;}
-                }
-                dp[1][i][j] %= M;
-            }
-        }
-        swap(dp[0], dp[1]);
-        memset(dp[1], 0, sizeof(dp[1]));
+int fun(int n, int m, int x, int y, int move) {
+    if (dp[move][x][y] >= 0) {return dp[move][x][y];}
+    dp[move][x][y] = 0;
+    if (move <= 0) {return 0;}
+    for (int i = 0; i < 4; i++) {
+        int dx = x+mx[i], dy = y+my[i];
+        if (dx<0 || dx>=n || dy<0 || dy>=m) {dp[move][x][y]++;}
+        else {dp[move][x][y] = (dp[move][x][y]+fun(n, m, dx, dy, move-1))%M;}
     }
 
-    return dp[0][startColumn][startRow];
+    return dp[move][x][y]%=M;
+}
+
+int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+    memset(dp, -0x3f, sizeof(dp));
+    return fun(m, n, startRow, startColumn, maxMove);
 }
 
 int main() {
