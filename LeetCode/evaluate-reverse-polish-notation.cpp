@@ -22,30 +22,31 @@ typedef pair<ll, ll> pll;
 //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
 int evalRPN(vector<string>& tokens) {
-    stack<int> stk;
-    for (auto &str : tokens) {
+    for (int i = 0, prev = -1; i < tokens.size(); i++) {
+        string str = tokens[i];
         if (isdigit(str[str.length()-1])) {
-            stk.push(stoi(str));
+            prev++;
+            if (prev < i) {tokens[prev] = str;}
         } else {
-            int b = stk.top(); stk.pop();
-            int a = stk.top(); stk.pop();
+            int a = stoi(tokens[prev-1]), b = stoi(tokens[prev]);
             switch (str[0]) {
                 case '+':
-                    stk.push(a+b);
+                    tokens[prev-1] = to_string(a+b);
                     break;
                 case '-':
-                    stk.push(a-b);
+                    tokens[prev-1] = to_string(a-b);
                     break;
                 case '*':
-                    stk.push(a*b);
+                    tokens[prev-1] = to_string(a*b);
                     break;
                 case '/':
-                    stk.push(a/b);
+                    tokens[prev-1] = to_string(a/b);
             }
+            prev--;
         }
     }
 
-    return stk.top();
+    return stoi(tokens[0]);
 }
 
 int main() {
