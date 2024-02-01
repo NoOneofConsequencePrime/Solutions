@@ -34,18 +34,27 @@ typedef pair<ll, ll> pll;
  */
 class Solution {
 private:
-    void dfs(int &ret, TreeNode *node) {
-        if (!node) {return;}
-        ret++;
-        dfs(ret, node->left); dfs(ret, node->right);
+    int height(TreeNode *node) {
+        int l = 0, r = 0;
+        TreeNode *tmpNode = node;
+        while (tmpNode) {
+            l++;
+            tmpNode = tmpNode->left;
+        }
+        tmpNode = node;
+        while (tmpNode) {
+            r++;
+            tmpNode = tmpNode->right;
+        }
+
+        if (l == r) {return pow(2, r)-1;}
+        return 1+height(node->left)+height(node->right);
     }
 public:
     int countNodes(TreeNode* root) {
         ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-        int ret = 0;
-        dfs(ret, root);
 
-        return ret;
+        return height(root);
     }
 };
 
