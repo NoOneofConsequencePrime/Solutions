@@ -24,16 +24,15 @@ typedef pair<ll, ll> pll;
 class Solution {
 public:
     vector<int> sequentialDigits(int low, int high) {
+        ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+        string str = "123456789";
         vector<int> ret;
-        for (int i = 1; i <= 9; i++) {
-            ll tmp = i;
-            while (tmp <= high) {
-                if (tmp >= low) {ret.push_back((int)tmp);}
-                if (tmp%10 != 9) {tmp = tmp*10+tmp%10+1;}
-                else {break;}
+        for (int len = 1; len <= 9; len++) {
+            for (int i = 0; i < 9-len+1; i++) {
+                int tmp = stoi(str.substr(i, len));
+                if (low <= tmp && tmp <= high) {ret.push_back(tmp);}
             }
         }
-        sort(ret.begin(), ret.end());
 
         return ret;
     }
