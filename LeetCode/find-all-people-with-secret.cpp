@@ -23,36 +23,59 @@ typedef pair<ll, ll> pll;
 
 class Solution {
 private:
-    int fd(int u) {
-        if (p[u] == u) {return u;}
-        else {return fd(p[u]);}
+    map<int, vector<pii>> mp;
+    vector<bool> chk, vis;
+    vector<vector<int>> adj;
+
+    bool dfs(int u) {
+        if (chk[u]) {return true;}
+        if (vis[u]) {return chk[u];}
+        vis[u] = true;
+
+        bool ret = false;
+        for (int v : adj[u]) {
+            if (dfs(v)) {ret = true;}
+        }
+        
+        return chk[u] = ret;
     }
 public:
-    vector<int> p;
     vector<int> findAllPeople(int n, vector<vector<int>>& meetings, int firstPerson) {
         ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-        p = vector<int>(n, 0);
-        sort(meetings.begin(), meetings.end(), [this](vector<int> &a, vector<int> &b) -> bool {
-            if (a[2] != b[2]) {return a[2] < b[2];}
-            return fd(a[0])==fd(0) || fd(a[1])==fd(0);
-        });
-        for (int i = 0; i < n; i++) {p[i] = i;}
-        p[firstPerson] = p[0];
+        adj = vector<vector<int>>(n, vector<int>());
+        chk = vector<bool>(n, false); chk[0] = chk[firstPerson] = true;
+        vis = vector<bool>(n, false);
         for (auto &v : meetings) {
-            int a = v[0], b = v[1];
-            if (fd(a) != fd(0) && fd(b) != fd(0)) {continue;}
-            if (fd(a) != fd(b)) {
-                p[fd(a)] = fd(b);
+            mp[v[2]].push_back({v[0], v[1]});
+        }
+
+        for (auto &[a, v] : mp) {
+            vector<int> tmp;
+            for (pii p : v) {
+                adj[p.f].push_back(p.s);
+                adj[p.s].push_back(p.f);
+                tmp.push_back(p.f); tmp.push_back(p.s);
             }
+            for (int x : tmp) {
+                fill(vis.begin(), vis.end(), false);
+                dfs(x);
+            }
+            for (int x : tmp) {adj[x].clear();}
         }
 
         vector<int> ret;
         for (int i = 0; i < n; i++) {
-            if (fd(i) == fd(0)) {
-                ret.push_back(i);
-            }
+            if (chk[i]) {ret.push_back(i);}
         }
-
         return ret;
     }
 };
+
+int main() {
+    Solution ans;
+    vector<vector<int>> v = {{3,1,3},{1,2,2},{0,3,3}};
+    vector<int> ret = ans.findAllPeople(4, v, 3);
+    for (int x : ret) {cout << x << " ";}
+
+    return 0;
+}
