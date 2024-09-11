@@ -1,0 +1,6 @@
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
+LeetCode/build/Debug/_template.o
+LeetCode/build/Debug/outDebug.exe
