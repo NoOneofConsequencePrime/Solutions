@@ -8,14 +8,15 @@ typedef pair<ll, ll> pll;
 class Solution {
 private:
     pii getDom(vector<int>& nums) {
-        unordered_map<int, int> mp;
-        int ma = INT_MIN;
+        pii tmp = {-1, 0};
         for (auto x : nums) {
-            mp[x]++;
-            if (mp[ma] < mp[x]) {ma = x;}
+            if (x != tmp.f) {
+                if (tmp.s == 0) {tmp = {x, 1};}
+                else {tmp.s--;}
+            } else {tmp.s++;}
         }
 
-        return {ma, mp[ma]};
+        return {tmp.f, count(nums.begin(), nums.end(), tmp.f)};
     }
     bool isDom(int n, int idx, int cnt, int total) {
         return (idx+1)/2 < cnt && (n-idx-1)/2 < (total-cnt);
