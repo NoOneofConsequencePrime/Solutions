@@ -30,7 +30,7 @@ public:
 
             for (int i = 0; i < 4; i++) {
                 pii v = {u.s.f+mx[i], u.s.s+my[i]};
-                if (v.f >= 0 && v.f < m && v.s >= 0 && v.s < n) {
+                if (v.f >= 0 && v.f < m && v.s >= 0 && v.s < n && grid[v.f][v.s] >= 0) {
                     pq.push({grid[v.f][v.s], v});
                 }
             }
