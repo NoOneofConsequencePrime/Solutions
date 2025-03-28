@@ -9,9 +9,9 @@ class Solution {
 private:
     int mx[4] = {1, -1, 0, 0};
     int my[4] = {0, 0, 1, -1};
-    const int MM = 1e6+5;
 public:
     vector<int> maxPoints(vector<vector<int>>& grid, vector<int>& queries) {
+        const int MM = *max_element(queries.begin(), queries.end())+5;
         vector<int> psa(MM, 0);
         int m = grid.size(), n = grid[0].size();
         priority_queue<ppi, vector<ppi>, greater<ppi>> pq;
@@ -21,10 +21,10 @@ public:
             ppi u = pq.top(); pq.pop();
             if (grid[u.s.f][u.s.s] < 0) {continue;}
             if (u.f <= ma) {
-                psa[ma+1]++;
+                if (ma+1 < MM) psa[ma+1]++;
             } else {
                 ma = u.f;
-                psa[ma+1]++;
+                if (ma+1 < MM) psa[ma+1]++;
             }
             grid[u.s.f][u.s.s] = -1;
 
