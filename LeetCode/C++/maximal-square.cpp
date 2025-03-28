@@ -2,19 +2,6 @@ class Solution {
 private:
     int m, n;
     vector<vector<int>> dp;
-
-    int fun(int x, int y, vector<vector<char>>& grid) {
-        if (dp[x][y] != -1) {return dp[x][y];}
-        dp[x][y] = grid[x][y]-'0';
-        int down = (x+1 >= m)? 0 : fun(x+1, y, grid);
-        int right = (y+1 >= n)? 0 : fun(x, y+1, grid);
-        down = right = min(down, right);
-        if (dp[x][y] && down) {
-            dp[x][y] = down + (grid[x+down][y+down] == '1');
-        }
-
-        return dp[x][y];
-    }
 public:
     int maximalSquare(vector<vector<char>>& matrix) {
         m = matrix.size(); n = matrix[0].size();
@@ -23,7 +10,13 @@ public:
         int ret = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                ret = max(ret, fun(i, j, matrix));
+                dp[i][j] = (matrix[i][j]=='1');
+                if (dp[i][j]) {
+                    int m = min((i-1>=0? dp[i-1][j]:0), (j-1>=0? dp[i][j-1]:0));
+                    dp[i][j] = m + (matrix[i-m][j-m] == '1');
+                }
+
+                ret = max(ret, dp[i][j]);
             }
         }
 
