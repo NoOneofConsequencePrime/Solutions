@@ -9,17 +9,8 @@ private:
         int down = (x+1 >= m)? 0 : fun(x+1, y, grid);
         int right = (y+1 >= n)? 0 : fun(x, y+1, grid);
         down = right = min(down, right);
-        for (int i = down; i >= 0; i--) {
-            if (i == 0) {down = right = 0;}
-            if (x+i < m && y+i < n) {
-                if (grid[x+i][y+i] == '1') {
-                    down = right = i;
-                    break;
-                }
-            }
-        }
         if (dp[x][y] && down) {
-            dp[x][y] = down+1;
+            dp[x][y] = down + (grid[x+down][y+down] == '1');
         }
 
         return dp[x][y];
