@@ -1,11 +1,13 @@
 class Solution {
-    private:
-        int dp[35] = {};
     public:
         int fib(int n) {
             if (n <= 1) {return n;}
-            if (dp[n] != 0) {return dp[n];}
+            int a = 0, b = 1;
+            for (int i = 2; i <= n; i++) {
+                swap(a, b);
+                b += a;
+            }
     
-            return dp[n] = fib(n-1) + fib(n-2);
+            return b;
         }
     };
